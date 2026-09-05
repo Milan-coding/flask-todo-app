@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form action="{{ url_for('add') }}" method="post" class="d-flex mb-4">
+    <input type="text" name="title" class="form-control me-2" placeholder="新しいタスクを入力" autofocus>
+    <button type="submit" class="btn btn-primary">追加</button>
+</form>
+
+{% if tasks %}
+<ul class="list-group">
+    {% for task in tasks %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        <form action="{{ url_for('toggle', task_id=task.id) }}" method="post" class="d-flex align-items-center flex-grow-1 mb-0">
+            <input type="checkbox" class="form-check-input me-2" onchange="this.form.submit()" {% if task.done %}checked{% endif %}>
+            <span class="{% if task.done %}text-decoration-line-through text-muted{% endif %}">{{ task.title }}</span>
+        </form>
+        <form action="{{ url_for('delete', task_id=task.id) }}" method="post" class="mb-0">
+            <button type="submit" class="btn btn-sm btn-outline-danger">削除</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p class="text-muted">タスクはまだありません。</p>
+{% endif %}
+{% endblock %}
